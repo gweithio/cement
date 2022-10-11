@@ -10,7 +10,7 @@ static u8 _builder_create_empty_db(const char* name) {
 
   // using stat, we can check if the file exists
   if (stat(name, &buffer) == 0) {
-    return 0;
+    return 1;
   }
 
   FILE* db_file = fopen(name, "w");
@@ -42,8 +42,8 @@ u8 builder_get_db_size(builder_db_t* builder) {
       "SELECT (page_count - freelist_count) * page_size as size FROM "
       "pragma_page_count(), pragma_freelist_count(), pragma_page_size();";
 
-  u8 rec = (u8)sqlite3_exec(builder->db, query, _stats_callback, (void*)data,
-                            &errorMsg);
+  u8 rec = (u8)sqlite3_exec((sqlite3*)builder->db, query, _stats_callback,
+                            (void*)data, &errorMsg);
   if (rec != SQLITE_OK) {
     fprintf(stderr, "Error: %s\n", errorMsg);
     sqlite3_free(errorMsg);
@@ -62,7 +62,7 @@ builder_db_t* builder_create_db(const char* name) {
 
   if (sqlite3_open_v2(builder->name, &builder->db, SQLITE_OPEN_READWRITE,
                       NULL) != SQLITE_OK) {
-    fprintf(stderr, "Failed to open %s", builder->name);
+    fprintf(stderr, "Failed to open %s\n", builder->name);
     return NULL;
   }
 
@@ -70,7 +70,12 @@ builder_db_t* builder_create_db(const char* name) {
 }
 
 u8 builder_destroy_db(builder_db_t* builder) {
-  sqlite3_close(builder->db);
+  u8 error = 1;
+  if (sqlite3_close(builder->db) != SQLITE_OK) {
+    error = 0;
+    fprintf(stderr, "Failed to close DB\n");
+  }
+
   free(builder);
-  return 0;
+  return error;
 }

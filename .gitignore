@@ -1,6 +1,8 @@
 # Prerequisites
 *.d
 
+test.db
+
 .cache
 .idea
 cmake-build-debug
