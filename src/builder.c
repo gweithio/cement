@@ -70,12 +70,12 @@ builder_db_t* builder_create_db(const char* name) {
 }
 
 u8 builder_destroy_db(builder_db_t* builder) {
-  u8 error = 1;
+  u8 success = 1;
   if (sqlite3_close(builder->db) != SQLITE_OK) {
-    error = 0;
+    success = 0;
     fprintf(stderr, "Failed to close DB\n");
   }
 
   free(builder);
-  return error;
+  return success;
 }

@@ -18,7 +18,7 @@ int main(void) {
 
   builder_get_db_size(new_db);
 
-  if (query_create_table(
+  if (!query_create_table(
           new_db, "CREATE TABLE IF NOT EXISTS hello (id INTEGER PRIMARY KEY "
                   "AUTOINCREMENT,"
                   "text TEXT NOT NULL, "
@@ -26,11 +26,13 @@ int main(void) {
     return 0;
   }
 
-  char*       sql  = "INSERT INTO hello (text, created_at) VALUES ('%s', '%s')";
-  const char* time = time_now();
-  char        insert_string[256];
+  char* sql  = "INSERT INTO hello (text, created_at) VALUES ('%s', '%s')";
+  char* time = time_now();
+  char  insert_string[256];
 
-  sprintf(insert_string, sql, "hellope!", time);
+  sprintf(insert_string, sql, "HELLO!!!", time);
+
+  free(time);
 
   if (!query_exec(new_db, insert_string, NULL)) {
     return 0;

@@ -1,23 +1,23 @@
 #ifndef UTILS_HEADER
 #define UTILS_HEADER
 
+#include <core/types.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <time.h>
 #include <string.h>
 
 char* time_now() {
-  time_t     timer;
-  char       buffer[26];
-  struct tm* tm_info;
-  char*      final = NULL;
+  u8         BUF_SIZE = 26;
+  time_t     timer    = time(NULL);
+  struct tm* tm_info  = localtime(&timer);
 
-  timer   = time(NULL);
-  tm_info = localtime(&timer);
+  char  buffer[BUF_SIZE];
+  char* result = malloc(sizeof(buffer) + 1);
 
-  strftime(buffer, 26, "%Y-%m-%d", tm_info);
+  strftime(buffer, BUF_SIZE, "%Y-%m-%d", tm_info);
 
-  memmove(final, buffer, strlen(buffer));
-
-  return final;
+  return strcpy(result, buffer);
 }
 
 #endif

@@ -18,7 +18,7 @@ u8 query_exec(builder_db_t* builder, const char* query, query_callback cb) {
     sqlite3_free(errorMsg);
   }
 
-  return rec;
+  return 1;
 }
 
 u8 query_create_table(builder_db_t* builder, const char* table_str) {
@@ -26,5 +26,6 @@ u8 query_create_table(builder_db_t* builder, const char* table_str) {
     fprintf(stderr, "Could not create table: %s", sqlite3_errmsg(builder->db));
     return 0;
   }
+
   return 1;
 }
