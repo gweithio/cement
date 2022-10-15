@@ -14,7 +14,7 @@ u8 query_exec(builder_db_t* builder, const char* query, query_callback cb) {
   }
 
   if (rec != SQLITE_OK) {
-    fprintf(stderr, "Error: %s\n", errorMsg);
+    fprintf(stderr, "Error Exec: %s\n", errorMsg);
     sqlite3_free(errorMsg);
   }
 
